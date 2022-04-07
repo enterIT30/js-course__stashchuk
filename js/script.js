@@ -1,10 +1,17 @@
-function anotherFunction() {
-  console.log('Hola');
-}
+//Формат записи массивов
 
-function fnWithCallback(callbackFunction) {
-  callbackFunction();
-}
+const myArray = [1, 2, 3];
+console.log(myArray);
 
-fnWithCallback(anotherFunction);
+myArray.push('z');
+
+console.log(myArray);
+
+
+/* const myArray2 = new Array (1, 2, 3);
+console.log(myArray2);
+ */
+
+
+
 
