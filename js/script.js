@@ -1,17 +1,9 @@
-//Формат записи массивов
+const age = 18;
 
-const myArray = [1, 2, 3];
-console.log(myArray);
-
-myArray.push('z');
-
-console.log(myArray);
-
-
-/* const myArray2 = new Array (1, 2, 3);
-console.log(myArray2);
- */
-
-
-
-
+if (age >= 18) {
+  console.log('Is adult');
+} else if (age >= 12) {
+  console.log('Is teenager');
+} else {
+  console.log('Is child');
+}
