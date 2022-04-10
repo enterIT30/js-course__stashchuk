@@ -952,3 +952,409 @@ if (age >= 18) {
 ```
 
 ### Использование IF в функциях
+
+```
+const sumPositiveNumbers = (a, b) => {
+  if (typeof(a) !== 'number' || typeof(b) !== 'number') {
+    return 'One of the arguments is not a number';
+  }
+
+  if (a <= 0 || b <= 0) {
+    return 'Numbers are not positive';
+  }
+
+  return a + b;
+};
+```
+
+### SWITCH
+_Альтернатива для if...if else...if_
+
+```
+switch (выражение) {
+  case A:
+    // Действие если выражение === А
+    break;
+  case B:
+    // Действие если выражение === B
+    break;
+  default:
+    // действие по умолчанию
+}
+```
+
+`break` - остановка (выход). Если не установить, то проверка по case продолжится.
+
+> `switch` - проверка на строгое равенство
+
+```
+const month = 5;
+
+switch (month) {
+  case 12:
+    console.log('Декабрь');
+    break;
+  case 1:
+    console.log('Январь');
+    break;
+  case 2:
+    console.log('Февраль');
+    break;
+  default:
+    console.log('Это не зимний месяц');
+}
+```
+
+### Тернарный оператор
+
+_У тернарного оператора три операндами
+Конструкция с тернанрным оператором - это выражение, а выражение всегда возвращает значение_
+
+`Условие ? Выражение 1 : Выражение 2`
+
++ В условиях может быть любое выражение (проверка на true)
++ Если Условие правдиво, то возвращается результат Выражения 1
++ Если условие ложно - результат Выражения 2
+
+Можно писать так:
+```
+Условие
+  ? Выражение 1
+  : Выражение 2
+```
+
+**Примеры:**
+```
+const value = 11;
+
+value
+  ? console.log('Условие истенно')
+  : console.log('Условие ложно');
+```
+
+```
+const value1 = 11;
+const value2 = 25;
+
+value1 && value2
+  ? myFunction(value1, value2)
+  : myFunction();
+```
+
+```
+let value = 11;
+
+console.log(value >= 0 ? value : -value);
+
+
+let res = value >= 0 ? value : -value;
+
+console.log(res);
+
+```
+
+## Циклы
+
++ for
++ for...in...
++ while
++ do...while
++ for...of...
+
+### Цикл for
+
+```
+for (Начальная инструкция; Условие; Итерационное действие) {
+// Блок кода, выполняемый на каждой итерации
+}
+```
+
+```
+for (let i = 0; i < 5; i++) {
+  console.log(i);
+}
+```
+
+**Для перебора массивов не нужен цикл for**
+
+_Лучше использовать функции высшего порядка - "forEach", "map", "reduce"_
+
+Вот как всё таки применяется for для массивов
+
+```
+const myArray = ['first', 'second', 'third'];
+
+for (let i = 0; i < myArray.length; i++) {
+  console.log(myArray[i]);
+}
+```
+
+**Метод forEach**
+
+```
+const myArray = ['first', 'second', 'third'];
+
+myArray.forEach((element, index) => {
+  console.log(element, index);
+});
+
+// first 0
+// second 1
+// third 2
+```
++ `element` - каждый элемент массива
++ `index` - индекс каждого элемента (параметр опционален)
+
+### Цикл while
+
+_Выполняет блок кода, пока условие правдиво? если условие ложно, то не выполниться ни разу_
+
+```
+while (Условие) {
+  // Блок кода, выполняемый на каждой итерации
+}
+```
+
+```
+let i = 0;
+
+while (i < 5) {
+  console.log(i);
+  i++;
+}
+```
+> Если не указать изменение i, то есть убрать i++, то цикл будет бесконечный
+
+### Цикл do while
+
+_Выполнится как минимум один раз_
+
+```
+do {
+  // Блок кода, выполняемый на каждой итерации (выполняется хотя бы один раз)
+}
+while (Условие)
+```
+
+```
+let i = 0;
+
+do {
+  console.log(i);
+  i++;
+} while (i < 5);
+```
+Сначала выводится 0, увеличивается на единицу `i++;` и уже после этого проверяется условие `while (i < 5)`
+
+**Применяется тогда, когда блок кода нужно выполнить хотя бы раз**
+
+### Цикл for in (для объектов)
+
+_Можно выполнять действия с каждым свойством объекта_
+
+```
+for (key in Object) {
+  // Действия с каждым свойством объекта
+  // Значения свойства - Object[key]
+}
+```
+
+`key` - название переменной (название свойства объекта)
+`Object` - объект
+`Object[key]` - значение свойства
+
+```
+const myObject = {
+  x: 10,
+  y: true,
+  z: 'abc',
+};
+
+for (let key in myObject) {
+  console.log(`${key}:${myObject[key]}`);
+}
+
+// x:10
+// y:true
+// z:abc
+```
+
+### forEach для объектов (методы keys и values)
+
+```
+const myObject = {
+  x: 10,
+  y: true,
+  z: 'abc',
+};
+
+Object.keys(myObject).forEach(key => {
+  console.log(key, myObject[key]);
+});
+
+// x 10
+// y true
+// z abc
+
+```
+`Object.keys(myObject)` - метод keys переменной Object, для получения всех ключей объекта в виде массива (массив свойст) и далее перебор элементов этого массива `forEach`
+
+Можно сразу перебирать значения свойств объекта
+
+```
+const myObject = {
+  x: 10,
+  y: true,
+  z: 'abc',
+};
+
+Object.values(myObject).forEach(value => {
+  console.log(value);
+});
+
+// 10
+// true
+// abc
+```
+
+`Object.values(myObject)` - gj учение всех значений свойств объекта в виде массива
+
+### Цикл for in (для массивов)
+**!!! ТАК ДЕЛАТЬ НЕ РЕКОМЕНДУЕТСЯ**
+
+```
+const myArray = [true, 10, 'abc', null];
+
+for (const key in myArray) {
+  console.log(myArray[key]);
+}
+
+// true
+// 10
+// abc
+// null
+```
+
+### Цикл for of
+
+```
+for (Element of Iterable) {
+  // Действия с определенным элементом
+}
+```
+
+Для строк
+```
+const myString = 'Hey';
+
+for (const letter of myString) {
+  console.log(letter);
+}
+
+// H
+// e
+// y
+```
+
+Для массивов
+```
+const myArray = [true, 10, 'abc', null];
+
+for (const element of myArray) {
+  console.log(element);
+}
+
+// true
+// 10
+// abc
+// null
+```
+
+**!!! FOR OF НЕ ДЛЯ ОБЪЕКТОВ**
+
+## МОДУЛИ
++ _Позволяют структурировать код_
++ _Позволяюь избегать дублирования блоков кода_
+
+### EXPORT/IMPORT (ES6)
+
+moduleOne.js    =>    moduleTwo.js
+export...       =>    import...
+
+Связь модулей. Из модуля moduleOne.js экспортируются (переменные, функции и тд), а в moduleTwo.js импортируются с первого модуля
+
+
+**moduleOne.js**
+Экспортируем функцию myName (теперь доступна для других модулей)
+
+```
+const myName = () => {
+  console.log('Vladyslav');
+};
+
+export default myName;  // экспорт функции
+```
+
+**moduleTwo.js**
+
+Импортируем функцию myName из модуля moduleOne.js
+
+```
+impoort printMyName from './moduleOne.js';
+
+printMyName();  // Vladyslav
+```
+`'./moduleOne.js'` - строка-путь ( **./** - _находятся в одной папке, .js - можно опускать_)
+
+`myName` и `printMyName` - отличаются названия, что допускается при default экспорте
+
+### Несколько экспортов
+
+
+**moduleOne.js**
+
+```
+const one = 1;
+const two = 'two';
+
+export {
+  one,
+  two
+}
+```
+
+**moduleTwo.js**
+
+```
+import {
+  one,
+  two
+} from './moduleOne.js';
+
+console.log(one);  // 1
+console.log(two);  // two
+```
+
+**Имена переменных должны совпадать, но их можно переименовать при импорте**
+
+**moduleTwo.js**
+
+```
+import {
+  one as oneRenamed
+  two
+} from './moduleOne.js';
+
+console.log(oneRenamed);  // 1
+console.log(two);  // two
+```
+
+`as` - указать новое имя, после импорта
+
+### Правила работы с модулями
+
+> 1. Модули должны быть одноцелевыми
+> 2. Распологайте все export инструкции внизу файла
+> 3. Распологайте все import инструкции сверху файла
+> 4. По возможности используйте export default
+> 5. Сначала import из внешних пакетов, а потом собственных
