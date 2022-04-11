@@ -1358,3 +1358,235 @@ console.log(two);  // two
 > 3. Распологайте все import инструкции сверху файла
 > 4. По возможности используйте export default
 > 5. Сначала import из внешних пакетов, а потом собственных
+
+## Классы и прототипы
+
+**Синтаксис классов появился в ES6**
+
+_С помощью классов можно создавать шаблоны, либо заготовки для объектов и потом, на основании этих заготовок создавать экземпляры объектов_
+
+`class ...`
+
+
+
++ классы позволяют создавать прототипы для обюъектов
++ на основании прототипов создаются экземпляры
++ экземпляры могут иметь собственные свойства и методы
++ экземпляры наследуют свойства и методы прототипов
+
+```
+class Comment {
+  constructor(text) {
+    this.text = text;
+    this.votesQty = 0;
+  }
+
+  upvote() {
+    this.votesQty +=1;
+  }
+}
+```
+
+`class` - ключевое слово
+
+`Comment` - название класса (PascalCase notation)
+
+`{}` - внутри всё что касается класса( свойтсва и методы)
+
+`constructor и upvote` - методы, в скобках `()` - опциональные параметры и далее тело `{}` конкретного метода
+
+`this` - спец переменная указывает на экземпляр класса (ссылается на новый экземпляр)
+
+### Создание экземпляров класса
+
+`const firstComment = new Comment('First comment');`
+
+`new` - префиксный унарный оператор (**вызывается функция constructor**)
+
+`upvote` - унаследован свойства экземпляра
+
+### Цупочка прототипов
+
+firstComment => Comment => Object
+
+### Проверка принадлежности instanceof
+
+```
+console.log(firstComment instanceof Comment);
+console.log(firstComment instanceof Object);
+
+// true
+// true
+```
+
+### Вызов унаследованных методов
+
+```
+const firstComment = new Comment('First comment');
+
+firstComment.upvote();
+console.log(firstComment.votesQty);
+
+firstComment.upvote();
+console.log(firstComment.votesQty);
+
+firstComment.upvote();
+console.log(firstComment.votesQty);
+
+// 1
+// 2
+// 3
+```
+
+## Проверка принадлежности свойств экземпляру объекта hasOwnProperty
+
+_Есть ли у firstComment **собственное** свойство_
+```
+const firstComment = new Comment('First comment');
+
+console.log(firstComment.hasOwnProperty('text'));
+
+console.log(firstComment.hasOwnProperty('votesQty'));
+
+console.log(firstComment.hasOwnProperty('hasOwnProperty')); // наследуется от класса  Comment
+
+console.log(firstComment.hasOwnProperty('upvote')); // наследуется от класса  Comment
+
+// true
+// true
+// false
+// false
+```
+
+## Создание нескольких экземпляров
+
+```
+const firstComment = new Comment('First comment');
+const secondComment = new Comment('Second comment');
+const thirdComment = new Comment('Third comment');
+```
+
+## Статические методы
+
+_Метод доступен как свойство класса и не наследуется экземплярами класса_
+
+```
+class Comment {
+  constructor(text) {
+    this.text = text;
+    this.votesQty = 0;
+  }
+
+  upvote() {
+    this.votesQty +=1;
+  }
+
+  static mergeComments(first, second) {
+    return `${first} ${second}`;
+  }
+}
+
+Comment.mergeComments('First comment.', 'Second comment.');
+```
+---
+
+//!!! ==================
+
+## Расширение других классов extends
+
+```
+class NumbersArray extends Array {
+  sum() {
+    return this.reduce((el, acc) => acc += el, 0);
+  }
+}
+
+const myArray = new NumbersArray(2, 5, 7);
+
+console.log(myArray);
+myArray.sum();
+```
+
+`Array` - родительский класс для `NumbersArray`
+`constructor` не нужен, так как расширяя `Array`, конструктор родительского класса вызовется автоматически 
+
+### Цепочка прототипов
+
+`mArray` => `NumbersArray` => `Array` => `Object`
+
+// !!! ========================================
+
+## Что такое прототипов
+
+_У каждого экземпляра есть скрыто свойство_ `__proto__`
+
+Свойство `prototype` класса - равно свойсту `__proto__` любого экземпляра
+
+```
+Comment.prototype === firstComment.__proto__
+```
+
+## Промисы
+
+_Позволяют обрабатывать отложенные во времени события_
+
+Асинхронный запрос - не знаете, когда получите ответ (не сразу, а через какое-то время)
+
+Промис - это обещание предоставить результат позже (возвращает ошибку, если предоставить невозможно)
+
+### Состояния промиса
+
++ ожидание (pending) - промис создаётся
++ исполнен (resolved) - результат получен
++ откланен (rejected) - вернул ошибку
+
+## Создание промиса
+
+Только созданный промис в состоянии ожидания(pending)
+```
+const myPromise = new Promise((resolve, reject) => {
+  /* 
+  *Выполнение асинхронных действий
+  *
+  * Внутри этой функциинужно в результате вызвать одну из функций resolve или reject
+  * 
+  */
+});
+```
+
++ `new` - (вызывается constructor) создает новый экземпляр класса Promise(присутствует в js) и присвоен переменной
+
++ `(resolve, reject) => {}` - колбек функция
+
++ `resolve, reject` - два обязательных параметра
+
++ `{}` - в теле колбек функции нужно вызвать `resolve` или `reject`
+
++ `resolve` - передать какой-то результат (данные) и когда была вызвана функция `resolve`, промис считается исполнен (меняется состояние с состояния ожидания)
+
++ если возникла ошибка, то нужно вызвать функцию `reject` и передать ту ошибку, которая возникла. В таком случае промис считается откланенным
+
+### Получение рузультата промиса
+
+```
+myPromise
+  .then(value => {
+    /*
+    * Дуйствие в случае успешного исполнения промиса
+    * Значение value - это значение, переданное в вызове функции resolve внутри Промиса
+    */
+  });
+  .catch(error => {
+    /*
+    * Действие в случае отклонения Промиса
+    * Значение error - это значение, переданное в вызове функции reject внутри Промиса
+    */
+  });
+  ```
+
+У объекта `myPromise` доступны методы `.then` и `.catch`.
+
+В `.then` и `.catch` в параметрах нужно предать функцию с одним параметром (value или error)
+
+
+
